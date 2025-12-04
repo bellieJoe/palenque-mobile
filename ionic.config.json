@@ -1,0 +1,7 @@
+{
+  "name": "palenque-collector",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
