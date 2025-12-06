@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Backend URL</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="backendUrlForm" (ngSubmit)="saveBackendUrl()">
+      <ion-list>
+        <ion-item>
+          <ion-label position="floating">Backend URL</ion-label>
+          <ion-input formControlName="url" placeholder="Enter backend URL" fill="solid"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="backendUrlForm.get('url')?.touched && backendUrlForm.get('url')?.invalid">
+          Enter a valid URL
+        </ion-text>
+      </ion-list>
+
+      <ion-button expand="block" type="submit" [disabled]="!backendUrlForm.valid">Save</ion-button>
+    </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
