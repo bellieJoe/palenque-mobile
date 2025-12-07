@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { AuthService } from './services/auth-service';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -10,7 +13,21 @@ export class AppComponent {
     { title: 'Stall Rent Collection', url: '/collections/stall-rents', icon: 'cash' },
     { title: 'Ambulant Stalls Collection', url: '/collections/ambulant-stalls', icon: 'cash' },
     { title: 'Settings', url: '/settings', icon: 'settings' },
-    { title: 'Logout', url: '/folder/inbox', icon: 'log-out' },
+    // { title: 'Logout', url: '/folder/inbox', icon: 'log-out' },
   ];
-  constructor() {}
+  constructor(
+    private authService : AuthService,
+    private toastController : ToastController,
+    private router : Router
+  ) {}
+
+  async logout() {
+    try {
+      await this.authService.logout();
+      this.toastController.create({message: 'Logout successful', duration: 2000, color: 'success'}).then(toast => toast.present());
+      this.router.navigate(['login']);
+    } catch (error) {
+      this.toastController.create({message: 'Error logging out', duration: 2000, color: 'danger'}).then(toast => toast.present());
+    }
+  }
 }

@@ -22,8 +22,17 @@ export class AuthService {
   }
 
   public logout = async () => {
-    await axios.post(`${this.apiUrl}/api/logout`);
+    await axios.post(`${this.apiUrl}/api/auth/logout`);
     this.authUser = null;
     localStorage.removeItem('user');
+  }
+
+  public getAuth = async () => {
+    
+  }
+
+  public isAuth = async () => {
+    const res = await axios.get(`${this.apiUrl}/api/auth/is-auth`);
+    return res.data;
   }
 }

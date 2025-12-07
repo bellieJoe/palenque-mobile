@@ -8,9 +8,116 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div class="py-4">
+    <ion-datetime-button datetime="datetime" ></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="datetime" presentation="month-year" [(ngModel)]="dateFilter" (ngModelChange)="filter()"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </div>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button >
+    <ion-fab-button id="add-collection-modal">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <ion-list>
+    <ion-list-header>Daily Collections</ion-list-header>
+    @for(fee of feeService.fees; track fee; let i = $index) {
+      <ion-item-sliding>
+        <ion-item >
+          <ion-icon slot="start" name="receipt-outline"></ion-icon>
+          <div class="">
+            <p class="mb-0 fw-semibold">{{fee.ambulant_stall?.name}}</p>
+            <p class="mb-0 text-muted">{{fee.amount | currency : "₱ "}}</p>
+            <ion-note class="mb-0 text-muted" >{{fee.date_issued | date : "short"}}</ion-note>
+          </div>
+          
+          <ion-label slot="end">{{fee.status}}</ion-label>
+        </ion-item>
+        <ion-item-options>
+          @if(fee.status == 'UNPAID') {
+            <ion-item-option color="success">
+              Update
+            </ion-item-option>
+          }
+        </ion-item-options>
+      </ion-item-sliding>
+    }
+
+    <ion-item *ngIf="feeService.fees.length === 0">
+      <p class="text-center text-muted">No daily collections found</p>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
+<!-- add collection modal -->
+<ion-modal trigger="add-collection-modal" #addCollectionModal >
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">Cancel</ion-button>
+        </ion-buttons>
+        <ion-title>Add Collection</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <form [formGroup]="addCollectionForm" (ngSubmit)="submitCollection()">
+        <ion-list>
+          <ion-item>
+            <ion-select label="Select Ambulant Stall" formControlName="ambulant_stall"  labelPlacement="floating">
+              @for(stall of ambulantStallService.ambulantStalls; track stall; let i = $index) {
+                <ion-select-option [value]="stall.id">{{stall.name}}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+          @if(errors?.ambulant_stall) {
+            <small class="text-danger" >{{errors?.stall_occupant[0]}}</small>
+          }
+
+          <ion-item>
+            <ion-input type="number" placeholder="Amount" labelPlacement="floating" label="Amount" formControlName="amount"></ion-input>
+          </ion-item>
+          @if(errors?.amount) {
+            <small class="text-danger" >{{errors?.stall_occupant[0]}}</small>
+          }
+
+          <ion-item>
+            <ion-select label="Select Status" formControlName="status" labelPlacement="floating">
+              <ion-select-option value="PAID">Paid</ion-select-option>
+              <ion-select-option value="UNPAID">Unpaid</ion-select-option>
+            </ion-select>
+          </ion-item>
+          @if(errors?.status) {
+            <small class="text-danger" >{{errors?.status[0]}}</small>
+          }
+
+          @if(addCollectionForm.value.status == 'PAID') {
+            <ion-item>
+              <ion-input type="date" placeholder="Date Paid" labelPlacement="floating" label="Date Paid" formControlName="date_paid"></ion-input>
+            </ion-item>
+            @if(errors?.date_paid) {
+              <small class="text-danger" >{{errors?.date_paid[0]}}</small>
+            }
+            <ion-item>
+              <ion-input type="text" placeholder="Receipt No" labelPlacement="floating" label="Receipt No" formControlName="receipt_no"></ion-input>
+            </ion-item>
+            @if(errors?.receipt_no) {
+              <small class="text-danger" >{{errors?.receipt_no[0]}}</small>
+            }
+          }
+          <ion-item>
+            <ion-textarea label="Remarks" placeholder="Enter Remarks Here" labelPlacement="floating" formControlName="remarks"></ion-textarea>
+          </ion-item>
+        </ion-list>
+        <br>
+        <ion-button expand="block" type="submit" [disabled]="!addCollectionForm.valid">Save</ion-button>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+

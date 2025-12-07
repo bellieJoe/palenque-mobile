@@ -28,8 +28,8 @@ export class LoginPage implements OnInit {
    }
 
    async submitLogin() {
+    console.log("test");
     try {
-      console.log(this.loginForm.value);
       await this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
       this.toastController.create({message: 'Login successful', duration: 2000, color: 'success'}).then(toast => toast.present());
       this.router.navigate(['collections/stall-rents']);
@@ -44,6 +44,7 @@ export class LoginPage implements OnInit {
    }
 
   ngOnInit() {
+
   }
 
 }
