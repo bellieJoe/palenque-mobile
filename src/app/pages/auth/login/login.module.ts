@@ -4,18 +4,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StallRentsPageRoutingModule } from './stall-rents-routing.module';
+import { LoginPageRoutingModule } from './login-routing.module';
 
-import { StallRentsPage } from './stall-rents.page';
+import { LoginPage } from './login.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    StallRentsPageRoutingModule,
+    LoginPageRoutingModule,
     ReactiveFormsModule
   ],
-  declarations: [StallRentsPage]
+  declarations: [LoginPage]
 })
-export class StallRentsPageModule {}
+export class LoginPageModule {}

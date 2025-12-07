@@ -1,0 +1,39 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content [fullscreen]="true">
+  <div class="">
+    <div class="p-2 m-0 ">
+      <h1 class="text-center fw-bold mb-4">PalenQUE</h1>
+      <p class="text-center mb-4">Mobile Application for Market Collectors</p>
+      <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+        <ion-list>
+          <ion-item>
+            <ion-input 
+              type="email" 
+              placeholder="Email" 
+              labelPlacement="floating" 
+              formControlName="email"
+              label="Email" >
+            </ion-input>
+          </ion-item>
+          <div class="" *ngIf="errors?.email">
+            <small class="text-danger" >{{errors?.email[0]}}</small>
+          </div>
+          <ion-item>
+            <ion-input type="password" placeholder="Password" labelPlacement="floating" label="Password" formControlName="password">
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+            </ion-input>
+          </ion-item>
+          <div class="" *ngIf="errors?.password">
+            <small class="text-danger" >{{errors?.empasswordail[0]}}</small>
+          </div>
+        </ion-list>
+        <ion-button expand="block" type="submit">Login</ion-button>
+      </form>
+    </div>
+  </div>
+</ion-content>

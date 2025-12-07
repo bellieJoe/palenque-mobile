@@ -8,10 +8,85 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-modal trigger="add-rent-modal" keepContentsMounted="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()" >Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Update Monthly Rent</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <form [formGroup]="updateRentForm" (ngSubmit)="updateRent()">
+          <ion-list>
+            <ion-item>
+              <ion-select label="Select Stall Occupant" formControlName="stall_occupant" (ngModelChange)="filterUnpaidRents()" labelPlacement="floating">
+                <ion-select-option [value]="item.id" *ngFor="let item of stallOccupantsService.stallOccupants">
+                  {{ item.stall?.name }} | {{ item.vendor?.name }}
+                  </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div class="" *ngIf="errors?.stall_occupant">
+              <small class="text-danger" >{{errors?.stall_occupant[0]}}</small>
+            </div>
+            <ion-item>
+              <ion-select label="Select Rent" formControlName="monthly_rent" labelPlacement="floating">
+                <ion-select-option [value]="item.id" *ngFor="let item of monthlyRentService.unpaidRents">
+                  {{ item.stall_contract?.stall_occupant?.stall?.name }} | {{ item.amount }}
+                  </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div class="" *ngIf="errors?.monthly_rent">
+              <small class="text-danger" >{{errors?.monthly_rent[0]}}</small>
+            </div>
+            <ion-item>
+              <ion-select label="Select Status" formControlName="status" labelPlacement="floating">
+                <ion-select-option value="PAID">Paid</ion-select-option>
+                <ion-select-option value="WAIVED">Waived</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div class="" *ngIf="errors?.status">
+              <small class="text-danger" >{{errors?.status[0]}}</small>
+            </div>
+          </ion-list>
+          <br>
+          <ion-button expand="block" type="submit" [disabled]="!updateRentForm.valid">Save</ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button >
+    <ion-fab-button id="add-rent-modal">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  {{monthlyRentService.monthlyRents}}
+
+  <div class="py-4">
+    <ion-datetime-button datetime="datetime" ></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="datetime" presentation="month-year" [(ngModel)]="dateFilter" (ngModelChange)="filter()"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </div>
+
+  <ion-list>
+    <ion-list-header>Paid Monthly Rents</ion-list-header>
+    <ion-item *ngFor="let rent of monthlyRentService.monthlyRents">
+      <ion-icon slot="start" name="receipt-outline"></ion-icon>
+      <div class="">
+        <p class="mb-0 fw-semibold">{{rent.stall_contract?.stall_occupant?.vendor?.name}}</p>
+        <p class="mb-0 text-muted">{{rent.amount_paid | currency : "₱ "}}</p>
+        <ion-note class="mb-0 text-muted">{{rent.payment_date | date : "medium"}}</ion-note>
+      </div>
+      
+      <ion-label slot="end">{{rent.status}}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="monthlyRentService.monthlyRents.length === 0">
+      <p class="text-center text-muted">No rents found</p>
+    </ion-item>
+  </ion-list>
 </ion-content>

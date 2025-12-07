@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './guards/auth-guard';
 
 const routes: Routes = [
   {
@@ -18,19 +19,25 @@ const routes: Routes = [
         path: 'ambulant-stalls',
        loadChildren: () =>
         import('./pages/collections/ambulant-stalls/ambulant-stalls.module')
-          .then(m => m.AmbulantStallsPageModule)
+          .then(m => m.AmbulantStallsPageModule),
+        canActivate: [authGuard]
       },
       {
         path: 'stall-rents',
        loadChildren: () =>
         import('./pages/collections/stall-rents/stall-rents.module')
-          .then(m => m.StallRentsPageModule)
+          .then(m => m.StallRentsPageModule),
+        canActivate: [authGuard]
       }
     ]
   },
   {
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/auth/login/login.module').then( m => m.LoginPageModule)
   },
   
   
