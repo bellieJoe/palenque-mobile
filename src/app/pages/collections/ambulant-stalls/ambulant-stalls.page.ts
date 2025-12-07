@@ -13,7 +13,9 @@ import { FeeService } from 'src/app/services/fee-service';
 export class AmbulantStallsPage implements OnInit {
   dateFilter : any = null;
   @ViewChild("addCollectionModal") addCollectionModal!: IonModal;
+  @ViewChild("updateCollectionModal") updateCollectionModal!: IonModal;
   addCollectionForm : FormGroup;
+  updateCollectionForm : FormGroup;
   errors : any = [];
 
   constructor(
@@ -30,6 +32,13 @@ export class AmbulantStallsPage implements OnInit {
       receipt_no: ['', []],
       date_paid: ['', []],
     });
+    this.updateCollectionForm = this.fb.group({
+      id: ['', [Validators.required]],
+      remarks: ['', []],
+      receipt_no: ['', [Validators.required]],
+      date_paid: ['', [Validators.required]],
+    });
+
   }
 
   async init(){
@@ -64,7 +73,35 @@ export class AmbulantStallsPage implements OnInit {
 
   cancel() {
     this.addCollectionModal.dismiss(null, 'cancel');
+    this.updateCollectionModal.dismiss(null, 'cancel');
+    this.updateCollectionForm.reset();
     this.addCollectionForm.reset();
+  }
+
+  showUpdateCollectionModal(collection : any) {
+    this.updateCollectionForm.setValue({
+      id: collection.id,
+      remarks: collection.remarks,
+      receipt_no: '',
+      date_paid: ''
+    });
+    this.updateCollectionModal.present();
+  }
+
+  async submitUpdateCollection(){
+    try {
+      await this.feeService.updateFee(this.updateCollectionForm.value.id, this.updateCollectionForm.value);
+      this.toastController.create({message: 'Fee updated', duration: 2000, color: 'success'}).then(toast => toast.present());
+      this.init();
+      this.cancel();
+    } catch (error : any) {
+      if(error?.response?.status == 422) {
+        this.errors = error?.response?.data?.errors;
+        this.toastController.create({message: error?.response?.data?.message, duration: 2000, color: 'danger'}).then(toast => toast.present());
+        return;
+      };
+      this.toastController.create({message: error?.response?.data?.error, duration: 2000, color: 'danger'}).then(toast => toast.present());
+    }
   }
 
   ngOnInit() {

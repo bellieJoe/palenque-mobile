@@ -18,4 +18,9 @@ export class FeeService {
     const res = await axios.post(`${this.apiUrl}/api/fees/create-ambulant-stall-fee`, data);
     return res.data;
   }
+
+  public updateFee = async (id : any, data : any) => {
+    const res = await axios.post(`${this.apiUrl}/api/fees/update-ambulant-stall-fee/${id}`, data);
+    return res.data;
+  }
 }
