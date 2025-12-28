@@ -27,10 +27,10 @@
     <ion-list-header>Daily Collections</ion-list-header>
     @for(fee of feeService.fees; track fee; let i = $index) {
       <ion-item-sliding>
-        <ion-item >
+        <ion-item class="p-2" lines="full">
           <ion-icon slot="start" name="receipt-outline"></ion-icon>
           <div class="">
-            <p class="mb-0 fw-semibold">{{fee.ambulant_stall?.name}}</p>
+            <ion-label color="primary" class="mb-0 fw-semibold">{{fee.ambulant_stall?.name}}</ion-label>
             <p class="mb-0 text-muted">{{fee.amount | currency : "₱ "}}</p>
             <ion-note class="mb-0 text-muted" >{{fee.date_issued | date : "short"}}</ion-note>
           </div>

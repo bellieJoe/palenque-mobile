@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Stall Rent Collection', url: '/collections/stall-rents', icon: 'cash' },
-    { title: 'Ambulant Stalls Collection', url: '/collections/ambulant-stalls', icon: 'cash' },
+    { title: 'Stall Rent Collections', url: '/collections/stall-rents', icon: 'cash' },
+    { title: 'Ambulant Collections', url: '/collections/ambulant-stalls', icon: 'cash' },
+    { title: 'Delivery Fee Collections', url: '/collections/delivery-fees', icon: 'cash' },
     { title: 'Settings', url: '/settings', icon: 'settings' },
     // { title: 'Logout', url: '/folder/inbox', icon: 'log-out' },
   ];

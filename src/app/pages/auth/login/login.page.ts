@@ -39,7 +39,7 @@ export class LoginPage implements OnInit {
         this.toastController.create({message: error?.response?.data?.message, duration: 2000, color: 'danger'}).then(toast => toast.present());
         return;
       };
-      this.toastController.create({message: error?.response?.data?.error, duration: 2000, color: 'danger'}).then(toast => toast.present());
+      this.toastController.create({message: error?.response?.data?.message, duration: 2000, color: 'danger'}).then(toast => toast.present());
     }
    }
 

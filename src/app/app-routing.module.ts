@@ -5,7 +5,7 @@ import { authGuard } from './guards/auth-guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folders/inbox',
+    redirectTo: 'collections/ambulant-stalls',
     pathMatch: 'full'
   },
   {
@@ -28,7 +28,11 @@ const routes: Routes = [
         import('./pages/collections/stall-rents/stall-rents.module')
           .then(m => m.StallRentsPageModule),
         canActivate: [authGuard]
-      }
+      },
+      {
+        path: 'delivery-fees',
+        loadChildren: () => import('./pages/collections/delivery-fees/delivery-fees.module').then( m => m.DeliveryFeesPageModule)
+      },
     ]
   },
   {
@@ -39,6 +43,7 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/auth/login/login.module').then( m => m.LoginPageModule)
   },
+ 
   
   
 ];
