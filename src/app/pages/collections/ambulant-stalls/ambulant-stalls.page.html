@@ -1,58 +1,99 @@
-<ion-header [translucent]="true">
+<ion-header translucent>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Ambulant Stall Collections</ion-title>
+    <ion-title class="">
+      Ambulant Stall Collections
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="py-4">
-    <ion-datetime-button datetime="datetime" ></ion-datetime-button>
+<ion-content fullscreen class="collections-content">
+
+  <!-- Filter Section -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter by month</span>
+
+    <ion-datetime-button datetime="datetime"></ion-datetime-button>
     <ion-modal [keepContentsMounted]="true">
       <ng-template>
-        <ion-datetime id="datetime" presentation="month-year" [(ngModel)]="dateFilter" (ngModelChange)="filter()"></ion-datetime>
+        <ion-datetime
+          id="datetime"
+          presentation="month-year"
+          [(ngModel)]="dateFilter"
+          (ngModelChange)="filter()">
+        </ion-datetime>
       </ng-template>
     </ion-modal>
   </div>
 
+  <!-- Floating Action Button -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button id="add-collection-modal">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-list>
-    <ion-list-header>Daily Collections</ion-list-header>
-    @for(fee of feeService.fees; track fee; let i = $index) {
+  <!-- List -->
+  <ion-list class="collections-list">
+    <ion-list-header class="list-header">
+      Daily Collections
+    </ion-list-header>
+
+    @for (fee of feeService.fees; track fee) {
       <ion-item-sliding>
-        <ion-item class="p-2" lines="full">
-          <ion-icon slot="start" name="receipt-outline"></ion-icon>
-          <div class="">
-            <ion-label color="primary" class="mb-0 fw-semibold">{{fee.ambulant_stall?.name}}</ion-label>
-            <p class="mb-0 text-muted">{{fee.amount | currency : "₱ "}}</p>
-            <ion-note class="mb-0 text-muted" >{{fee.date_issued | date : "short"}}</ion-note>
+
+        <ion-item lines="none" class="collection-card">
+          <ion-icon
+            slot="start"
+            name="receipt-outline"
+            class="receipt-icon">
+          </ion-icon>
+
+          <div class="collection-details">
+            <p class="stall-name">
+              {{ fee.ambulant_stall?.name }}
+            </p>
+            <p class="amount">
+              {{ fee.amount | currency : '₱ ' }}
+            </p>
+            <p class="date">
+              {{ fee.date_issued | date:'mediumDate' }}
+            </p>
           </div>
-          
-          <ion-label slot="end">{{fee.status}}</ion-label>
+
+          <span
+            slot="end"
+            class="status-badge"
+            [class.paid]="fee.status === 'PAID'"
+            [class.unpaid]="fee.status === 'UNPAID'">
+            {{ fee.status }}
+          </span>
         </ion-item>
+
         <ion-item-options>
-          @if(fee.status == 'UNPAID') {
-            <ion-item-option color="success" (click)="showUpdateCollectionModal(fee)">
+          @if (fee.status === 'UNPAID') {
+            <ion-item-option
+              color="success"
+              (click)="showUpdateCollectionModal(fee)">
               Update
             </ion-item-option>
           }
         </ion-item-options>
+
       </ion-item-sliding>
     }
 
-    <ion-item *ngIf="feeService.fees.length === 0">
-      <p class="text-center text-muted">No daily collections found</p>
+    <ion-item *ngIf="feeService.fees.length === 0" lines="none">
+      <p class="empty-state">
+        No daily collections found
+      </p>
     </ion-item>
   </ion-list>
 
 </ion-content>
+
 
 <!-- add collection modal -->
 <ion-modal trigger="add-collection-modal" #addCollectionModal >

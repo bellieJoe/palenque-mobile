@@ -31,7 +31,8 @@ const routes: Routes = [
       },
       {
         path: 'delivery-fees',
-        loadChildren: () => import('./pages/collections/delivery-fees/delivery-fees.module').then( m => m.DeliveryFeesPageModule)
+        loadChildren: () => import('./pages/collections/delivery-fees/delivery-fees.module').then( m => m.DeliveryFeesPageModule),
+        canActivate: [authGuard]
       },
     ]
   },
