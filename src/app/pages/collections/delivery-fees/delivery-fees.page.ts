@@ -23,7 +23,9 @@ export class DeliveryFeesPage implements OnInit {
   _items : any = [];
   errors : any = [];
   @ViewChild("addDeliveryModal") addDeliveryModal!: IonModal;
+  @ViewChild("updateDeliveryModal") updateDeliveryModal!: IonModal;
   addDeliveryForm : FormGroup;
+  updateDeliveryForm : FormGroup;
 
   constructor(
     private deliveryService : DeliveryService,
@@ -43,10 +45,44 @@ export class DeliveryFeesPage implements OnInit {
     if (items.length === 0) {
       this.addItem(); // adds a default item row
     }
+    this.updateDeliveryForm = this.fb.group({
+      id: ['', [Validators.required]],
+      delivery_date: [moment().format('YYYY-MM-DD'), [Validators.required]],
+      supplier : ['', [Validators.required]],
+      items: this.fb.array([]),
+    });
   }
 
   ngOnInit() {
     this.init();
+  }
+
+  get toUpdateItems(): FormArray {
+    return this.updateDeliveryForm.get('items') as FormArray;
+  }
+
+  showUpdateDeliveryModal(delivery : any) {
+    console.log(delivery);
+    this.updateDeliveryForm = this.fb.group({
+      id: [delivery.id, [Validators.required]],
+      delivery_date: [moment(delivery.delivery_date).format('YYYY-MM-DD'), [Validators.required]],
+      supplier : [delivery.supplier_id, [Validators.required]],
+      items: this.fb.array([]),
+    });
+    const items = this.updateDeliveryForm.get('items') as FormArray;
+    delivery.delivery_items.forEach((item : any) => {
+      items.push(this.fb.group({
+        id: [item.id, [Validators.required]],
+        item: [item.item_id, [Validators.required]],
+        unit: [item.unit_id, [Validators.required]],
+        quantity: [item.amount, [Validators.required, Validators.min(1)]],
+        total_sales: [item.sales, [Validators.required, Validators.min(1)]],
+        tax: [item.delivery_ticket.amount, [Validators.required, Validators.min(1)]],
+        ticket_no: [item.delivery_ticket.ticket_no, [Validators.required]],
+        ticket_status: [item.delivery_ticket.status, [Validators.required]],
+      }));
+    });
+    this.updateDeliveryModal.present();
   }
 
   createDeliveryItem(): FormGroup {
@@ -64,6 +100,8 @@ export class DeliveryFeesPage implements OnInit {
   get items(): FormArray {
     return this.addDeliveryForm.get('items') as FormArray;
   }
+
+  
 
   async init () {
     try {
@@ -137,6 +175,15 @@ export class DeliveryFeesPage implements OnInit {
   async cancelAddDelivery(){
     this.addDeliveryModal.dismiss();
     this.addDeliveryForm.reset();
+  }
+
+  async cancelUpdateDelivery(){
+    this.updateDeliveryModal.dismiss();
+    this.updateDeliveryForm.reset();
+  }
+
+  async updateDelivery(){
+    console.log(this.updateDeliveryForm.value);
   }
 
 }
