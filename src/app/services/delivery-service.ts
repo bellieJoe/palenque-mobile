@@ -11,4 +11,9 @@ export class DeliveryService {
     const res = await axios.get(`${this.apiUrl}/api/deliveries`, { params: query });
     return res.data;
   }
+
+  public storeDelivery = async (data : any) => {
+    const res = await axios.post(`${this.apiUrl}/api/deliveries/store`, data);
+    return res;
+  }
 }

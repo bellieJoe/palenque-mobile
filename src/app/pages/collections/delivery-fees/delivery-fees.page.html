@@ -70,7 +70,6 @@
 
         <ion-card class="add-delivery-card">
           <ion-card-content>
-
             <!-- Delivery Date -->
             <div class="form-group">
               <ion-item>
@@ -104,11 +103,19 @@
             <ion-card>
               <ion-card-content>
                 <ion-item>
-                  <ion-input placeholder="Item" formControlName="item" label="Item"></ion-input>
+                  <ion-select placeholder="Item" formControlName="item" label="Item" (ionChange)="onItemChange(i)">
+                    @for(item of getAvailableItems(i); track item) {
+                      <ion-select-option [value]="item.id">{{ item.name }}</ion-select-option>
+                    }
+                  </ion-select>
                 </ion-item>
     
                 <ion-item>
-                  <ion-input placeholder="Unit" formControlName="unit" label="Unit"></ion-input>
+                  <ion-select placeholder="Unit" formControlName="unit" label="Unit">
+                    @for(unit of units; track unit) {
+                      <ion-select-option [value]="unit.id">{{ unit.name }}</ion-select-option>
+                    }
+                  </ion-select>
                 </ion-item>
     
                 <ion-item>
@@ -116,7 +123,7 @@
                 </ion-item>
     
                 <ion-item>
-                  <ion-input type="number" placeholder="Total Sales" formControlName="total_sales" label="Total Sales"></ion-input>
+                  <ion-input type="number" placeholder="Total Sales" formControlName="total_sales" label="Total Sales" (ionChange)="onTotalSalesChange(i)"></ion-input>
                 </ion-item>
     
                 <ion-item>

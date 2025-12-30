@@ -38,7 +38,6 @@ export class AmbulantStallsPage implements OnInit {
       receipt_no: ['', [Validators.required]],
       date_paid: ['', [Validators.required]],
     });
-
   }
 
   async init(){
@@ -100,7 +99,7 @@ export class AmbulantStallsPage implements OnInit {
         this.toastController.create({message: error?.response?.data?.message, duration: 2000, color: 'danger'}).then(toast => toast.present());
         return;
       };
-      this.toastController.create({message: error?.response?.data?.error, duration: 2000, color: 'danger'}).then(toast => toast.present());
+      this.toastController.create({message: error?.response?.data?.message, duration: 2000, color: 'danger'}).then(toast => toast.present());
     }
   }
 
