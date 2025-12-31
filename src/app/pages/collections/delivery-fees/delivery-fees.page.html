@@ -214,7 +214,7 @@
               <ion-card-content>
                 <ion-item>
                   <ion-select placeholder="Item" formControlName="item" label="Item" (ionChange)="onItemChange(i)" readonly>
-                    @for(item of getAvailableItems(i); track item) {
+                    @for(item of getUpdateAvailableItems(i); track item) {
                       <ion-select-option [value]="item.id">{{ item.name }}</ion-select-option>
                     }
                   </ion-select>
@@ -233,7 +233,7 @@
                 </ion-item>
     
                 <ion-item>
-                  <ion-input type="number" placeholder="Total Sales" formControlName="total_sales" label="Total Sales" (ionChange)="onTotalSalesChange(i)"></ion-input>
+                  <ion-input type="number" placeholder="Total Sales" formControlName="total_sales" label="Total Sales" (ionChange)="onUpdateTotalSalesChange(i)"></ion-input>
                 </ion-item>
     
                 <ion-item>

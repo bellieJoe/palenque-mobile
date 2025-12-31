@@ -101,8 +101,6 @@ export class DeliveryFeesPage implements OnInit {
     return this.addDeliveryForm.get('items') as FormArray;
   }
 
-  
-
   async init () {
     try {
       this.deliveries = await this.deliveryService.getDeliveries({
@@ -129,6 +127,14 @@ export class DeliveryFeesPage implements OnInit {
     items.at(index).get('tax')?.setValue(tax);
   }
 
+  onUpdateTotalSalesChange(index: number) {
+    const items = this.updateDeliveryForm.get('items') as FormArray;
+    const total_sales = items.at(index).get('total_sales')?.value;
+    const tax = total_sales * (this.itemFeeSetting.percentage / 100);
+    console.log(tax);
+    items.at(index).get('tax')?.setValue(tax);
+  }
+
   removeItem(index: number) {
     this.items.removeAt(index);
   }
@@ -147,6 +153,16 @@ export class DeliveryFeesPage implements OnInit {
   getAvailableItems(index: number) {
     // Get all selected item IDs except for the current row
     const selectedIds = this.addDeliveryForm.value.items
+      .map((i: any) => i.item)
+      .filter((id: any, i: number) => i !== index && id != null);
+
+    // Filter the items list to exclude selected IDs
+    return this._items.filter((item : any) => !selectedIds.includes(item.id));
+  }
+
+  getUpdateAvailableItems(index: number) {
+    // Get all selected item IDs except for the current row
+    const selectedIds = this.updateDeliveryForm.value.items
       .map((i: any) => i.item)
       .filter((id: any, i: number) => i !== index && id != null);
 
@@ -183,7 +199,19 @@ export class DeliveryFeesPage implements OnInit {
   }
 
   async updateDelivery(){
-    console.log(this.updateDeliveryForm.value);
+    try {
+      await this.deliveryService.updateDelivery(this.updateDeliveryForm.value);
+      this.toastController.create({message: 'Delivery updated successfully', duration: 2000, color: 'success'}).then(toast => toast.present());
+      this.init();
+      this.cancelUpdateDelivery();
+    } catch (error : any) {
+      if(error.response.status == 422) {
+        this.errors = error.response.data.errors;
+        this.toastController.create({message: error.response.data.message, duration: 2000, color: 'danger'}).then(toast => toast.present());
+        return;
+      }
+      this.toastController.create({message: error.response.data.error, duration: 2000, color: 'danger'}).then(toast => toast.present());
+    }
   }
 
 }
