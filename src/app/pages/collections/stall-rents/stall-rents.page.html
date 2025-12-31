@@ -64,8 +64,9 @@
     </ion-fab-button>
   </ion-fab>
 
-  <div class="py-4">
-    <ion-datetime-button datetime="datetime" ></ion-datetime-button>
+  <div class="filter-bar">
+    <span class="filter-label">Filter by month</span>
+    <ion-datetime-button datetime="datetime"></ion-datetime-button>
     <ion-modal [keepContentsMounted]="true">
       <ng-template>
         <ion-datetime id="datetime" presentation="month-year" [(ngModel)]="dateFilter" (ngModelChange)="filter()"></ion-datetime>
@@ -73,20 +74,28 @@
     </ion-modal>
   </div>
 
-  <ion-list>
-    <ion-list-header>Paid Monthly Rents</ion-list-header>
-    <ion-item *ngFor="let rent of monthlyRentService.monthlyRents">
-      <ion-icon slot="start" name="receipt-outline"></ion-icon>
-      <div class="">
-        <p class="mb-0 fw-semibold">{{rent.stall_contract?.stall_occupant?.vendor?.name}}</p>
-        <p class="mb-0 text-muted">{{rent.amount_paid | currency : "₱ "}}</p>
-        <ion-note class="mb-0 text-muted">{{rent.payment_date | date : "medium"}}</ion-note>
-      </div>
+  <ion-list class="rent-list">
+    <ion-item *ngFor="let rent of monthlyRentService.monthlyRents"
+              lines="none"
+              class="rent-card">
       
-      <ion-label slot="end">{{rent.status}}</ion-label>
+      <ion-icon name="receipt-outline" slot="start" class="rent-icon"></ion-icon>
+
+      <div class="rent-details">
+        <p class="vendor-name">{{ rent.stall_contract?.stall_occupant?.vendor?.name }}</p>
+        <p class="rent-amount mb-0">{{ rent.amount_paid | currency:'₱ ' }}</p>
+        <p class="rent-date mb-0">{{ rent.payment_date | date:'mediumDate' }}</p>
+      </div>
+
+      <ion-badge slot="end"
+        [color]="rent.status === 'PAID' ? 'success' : 'warning'">
+        {{ rent.status }}
+      </ion-badge>
     </ion-item>
-    <ion-item *ngIf="monthlyRentService.monthlyRents.length === 0">
-      <p class="text-center text-muted">No rents found</p>
+
+    <ion-item *ngIf="monthlyRentService.monthlyRents.length === 0" lines="none">
+      <p class="empty-state">No rents found</p>
     </ion-item>
   </ion-list>
+
 </ion-content>

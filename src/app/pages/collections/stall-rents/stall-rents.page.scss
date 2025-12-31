@@ -1,18 +1,37 @@
-.rent-collections-content {
+/* ===============================
+   Page Background
+================================ */
+ion-content {
   --background: #f4f6f8;
 }
 
-/* Header */
+/* ===============================
+   Header
+================================ */
 .page-title {
   font-weight: 600;
 }
 
-/* Filter bar */
+/* ===============================
+   Floating Action Button
+================================ */
+ion-fab-button {
+  --border-radius: 14px;
+  --box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* ===============================
+   Filter Bar (Month / Date Filter)
+================================ */
 .filter-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin: 12px;
 }
 
 .filter-label {
@@ -20,30 +39,35 @@
   color: #6b7280;
 }
 
-/* List */
+/* ===============================
+   Rent List
+================================ */
 .rent-list {
   margin-top: 8px;
 }
 
-.list-header {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-/* Rent card */
+/* ===============================
+   Rent Card Item
+================================ */
 .rent-card {
   margin: 0 12px 12px;
   padding: 12px;
   border-radius: 16px;
   background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
 }
 
-.receipt-icon {
+.rent-icon {
   font-size: 22px;
   color: var(--ion-color-primary);
+  margin-right: 12px;
 }
 
+/* ===============================
+   Rent Details
+================================ */
 .rent-details {
   flex: 1;
 }
@@ -54,48 +78,82 @@
   color: #111827;
 }
 
-.amount {
-  font-size: 14px;
-  margin: 2px 0;
+.rent-amount {
+  font-size: 13px;
+  color: #374151;
+}
+
+.rent-date {
+  font-size: 12px;
   color: #6b7280;
 }
 
-.payment-date {
-  font-size: 12px;
-  color: #9ca3af;
-}
-
-/* Status badge */
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
+/* ===============================
+   Status Badge
+================================ */
+ion-badge {
+  border-radius: 12px;
+  font-size: 11px;
+  padding: 6px 10px;
   text-transform: uppercase;
 }
 
-.status-badge.paid {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-.status-badge.waived {
-  background: #fef3c7;
-  color: #b45309;
-}
-
-/* Error messages */
-.error-msg {
-  margin-left: 16px;
-  font-size: 12px;
-  color: #b91c1c;
-}
-
-/* Empty state */
+/* ===============================
+   Empty State
+================================ */
 .empty-state {
   width: 100%;
   text-align: center;
   padding: 24px;
   font-size: 14px;
   color: #9ca3af;
+}
+
+/* ===============================
+   Modal Content
+================================ */
+.add-rent-content {
+  --background: #f4f6f8;
+}
+
+/* ===============================
+   Card Styling (Forms)
+================================ */
+.add-rent-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+  background: #ffffff;
+}
+
+/* ===============================
+   Form Groups
+================================ */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+/* ===============================
+   Error Messages
+================================ */
+.error-msg {
+  margin-left: 16px;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+/* ===============================
+   Save Button
+================================ */
+.save-button {
+  margin-top: 8px;
+  --background: var(--ion-color-primary);
+  --color: #ffffff;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Utility */
+.mb-0 {
+  margin-bottom: 0;
 }

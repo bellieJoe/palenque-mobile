@@ -13,14 +13,14 @@
 
   <!-- Filter Section -->
   <div class="filter-bar">
-    <span class="filter-label">Filter by month</span>
+    <span class="filter-label">Filter by date</span>
 
     <ion-datetime-button datetime="datetime"></ion-datetime-button>
     <ion-modal [keepContentsMounted]="true">
       <ng-template>
         <ion-datetime
           id="datetime"
-          presentation="month-year"
+          presentation="date"
           [(ngModel)]="dateFilter"
           (ngModelChange)="filter()">
         </ion-datetime>

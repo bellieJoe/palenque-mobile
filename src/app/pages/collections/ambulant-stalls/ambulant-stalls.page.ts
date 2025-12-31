@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonModal, ToastController } from '@ionic/angular';
 import { AmbulantStallService } from 'src/app/services/ambulant-stall-service';
 import { FeeService } from 'src/app/services/fee-service';
+import { FeeSettingService } from 'src/app/services/fee-setting-service';
 
 @Component({
   selector: 'app-ambulant-stalls',
@@ -17,12 +18,14 @@ export class AmbulantStallsPage implements OnInit {
   addCollectionForm : FormGroup;
   updateCollectionForm : FormGroup;
   errors : any = [];
+  feeSetting : any = {};
 
   constructor(
     public feeService : FeeService,
     private toastController: ToastController,
     private fb : FormBuilder,
-    public ambulantStallService : AmbulantStallService
+    public ambulantStallService : AmbulantStallService,
+    public feeSettingService : FeeSettingService
   ) { 
     this.addCollectionForm = this.fb.group({
       ambulant_stall: ['', [Validators.required]],
@@ -43,6 +46,8 @@ export class AmbulantStallsPage implements OnInit {
   async init(){
     await this.feeService.getFees(this.dateFilter);
     await this.ambulantStallService.getAmbulantStalls();
+    this.feeSetting = await this.feeSettingService.getActiveSetting();
+    this.addCollectionForm.get('amount')?.setValue(this.feeSetting.rate);
   }
 
   async filter() {
