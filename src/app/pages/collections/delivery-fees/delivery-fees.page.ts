@@ -19,6 +19,7 @@ export class DeliveryFeesPage implements OnInit {
   deliveries : any = [];
   suppliers : any = [];
   units : any = [];
+  origins : any = [];
   itemFeeSetting : any = {};
   _items : any = [];
   errors : any = [];
@@ -90,10 +91,11 @@ export class DeliveryFeesPage implements OnInit {
       item: ['', Validators.required],
       unit: ['', Validators.required],
       quantity: [0, [Validators.required, Validators.min(1)]],
-      total_sales: [0, [Validators.required, Validators.min(1)]],
+      // total_sales: [0, [Validators.required, Validators.min(1)]],
       tax: [0, [Validators.required, Validators.min(1)]],
-      ticket_no: ['', Validators.required],
-      ticket_status: ['PAID', Validators.required],
+      // ticket_no: ['', Validators.required],
+      // ticket_status: ['PAID', Validators.required],
+      origin: ['', Validators.required],
     });
   }
 
@@ -108,7 +110,8 @@ export class DeliveryFeesPage implements OnInit {
       });
       this.suppliers = await this.supplierService.getSuppliers();
       this._items = await this.itemService.getItems();
-      this.units = await this.unitService.getUnits();
+      // this.units = await this.unitService.getUnits();
+      this.origins = await this.supplierService.getOrigins();
       this.itemFeeSetting = await this.itemFeeSettingService.getActiveItemFeeSetting();
     } catch (error) {
       this.toastController.create({message: 'Error fetching deliveries', duration: 2000, color: 'danger'}).then(toast => toast.present());
@@ -119,11 +122,12 @@ export class DeliveryFeesPage implements OnInit {
     this.items.push(this.createDeliveryItem());
   }
 
-  onTotalSalesChange(index: number) {
+  onCalculateTax(index: number) {
     const items = this.addDeliveryForm.get('items') as FormArray;
-    const total_sales = items.at(index).get('total_sales')?.value;
-    const tax = total_sales * (this.itemFeeSetting.percentage / 100);
-    console.log(tax);
+    const item = this._items.find((item: any) => item.id == items.at(index).get('item')?.value);
+    const taxRate = item.item_tax_rates.find((rate: any) => rate.unit_id == items.at(index).get('unit')?.value);
+    const tax = items.at(index).get('quantity')?.value * taxRate.tax_rate;
+    console.log(taxRate);
     items.at(index).get('tax')?.setValue(tax);
   }
 
@@ -143,7 +147,10 @@ export class DeliveryFeesPage implements OnInit {
     const items = this.addDeliveryForm.get('items') as FormArray;
     const item_id = items.at(index).get('item')?.value;
     const item = this._items.find((item: any) => item.id == item_id);
+    this.units = item.item_tax_rates.map((unit: any) => unit.unit);
     items.at(index).get('unit')?.setValue(item.default_unit_id);
+    items.at(index).get('origin')?.setValue(this.suppliers.find((i:any) => i.id == this.addDeliveryForm.value.supplier).origin_id);
+    console.log(this.suppliers.find((i:any) => i.id == this.addDeliveryForm.value.supplier))
   }
 
   async filter() {

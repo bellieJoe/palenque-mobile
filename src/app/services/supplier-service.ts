@@ -11,4 +11,9 @@ export class SupplierService {
     const res = await axios.get(`${this.apiUrl}/api/suppliers`);
     return res.data;
   }
+
+  public getOrigins = async () => {
+    const res  = await axios.get(`${this.apiUrl}/api/origins`);
+    return res.data;
+  }
 }

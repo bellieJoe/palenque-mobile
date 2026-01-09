@@ -44,7 +44,7 @@
           <p class="delivery-date mb-0">{{ delivery.delivery_date | date:'mediumDate' }}</p>
           <p class="delivery-date mb-0">{{ delivery.delivery_items.length }} item/s delivered</p>
         <ion-buttons slot="end">
-          <ion-button color="primary" expand="block" (click)="showUpdateDeliveryModal(delivery)">Update</ion-button>
+          <!-- <ion-button color="primary" expand="block" (click)="showUpdateDeliveryModal(delivery)">Update</ion-button> -->
         </ion-buttons>
         </div>
       </ion-item>
@@ -121,29 +121,37 @@
                     }
                   </ion-select>
                 </ion-item>
-    
+
                 <ion-item>
-                  <ion-input type="number" placeholder="Quantity" formControlName="quantity" label="Quantity"></ion-input>
+                  <ion-select placeholder="Origin" formControlName="origin" label="Origin">
+                    @for(origin of origins; track origin) {
+                      <ion-select-option [value]="origin.id">{{ origin.name }}</ion-select-option>
+                    }
+                  </ion-select>
                 </ion-item>
     
-                <ion-item>
+                <ion-item >
+                  <ion-input type="number" placeholder="Quantity" formControlName="quantity" label="Quantity" (ionChange)="onCalculateTax(i)"></ion-input>
+                </ion-item>
+    
+                <!-- <ion-item>
                   <ion-input type="number" placeholder="Total Sales" formControlName="total_sales" label="Total Sales" (ionChange)="onTotalSalesChange(i)"></ion-input>
-                </ion-item>
+                </ion-item> -->
     
                 <ion-item>
                   <ion-input type="number" placeholder="Tax" formControlName="tax" label="Tax" ></ion-input>
                 </ion-item>
     
-                <ion-item>
+                <!-- <ion-item>
                   <ion-input placeholder="Ticket No." formControlName="ticket_no" label="Ticket No."></ion-input>
-                </ion-item>
+                </ion-item> -->
     
-                <ion-item>
+                <!-- <ion-item>
                   <ion-select placeholder="Ticket Status" formControlName="ticket_status" label="Ticket Status">
                     <ion-select-option value="PAID">PAID</ion-select-option>
                     <ion-select-option value="UNPAID">UNPAID</ion-select-option>
                   </ion-select>
-                </ion-item>
+                </ion-item> -->
     
                 <ion-button color="danger" (click)="removeItem(i)">Remove</ion-button>
               </ion-card-content>
@@ -227,14 +235,22 @@
                     }
                   </ion-select>
                 </ion-item>
+
+                <ion-item>
+                  <ion-select placeholder="Origin" formControlName="origin" label="Origin">
+                    @for(origin of origins; track origin) {
+                      <ion-select-option [value]="origin.id">{{ origin.name }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
     
                 <ion-item>
                   <ion-input type="number" placeholder="Quantity" formControlName="quantity" label="Quantity"></ion-input>
                 </ion-item>
     
-                <ion-item>
+                <!-- <ion-item>
                   <ion-input type="number" placeholder="Total Sales" formControlName="total_sales" label="Total Sales" (ionChange)="onUpdateTotalSalesChange(i)"></ion-input>
-                </ion-item>
+                </ion-item> -->
     
                 <ion-item>
                   <ion-input type="number" placeholder="Tax" formControlName="tax" label="Tax" ></ion-input>
