@@ -40,7 +40,7 @@
         <ion-icon name="pricetag-outline" slot="start" class="delivery-icon"></ion-icon>
 
         <div class="delivery-details">
-          <p class="supplier-name">{{ delivery.supplier.name }}</p>
+          <p class="supplier-name">{{ delivery.supplier ? delivery.supplier.name : delivery.supplier_name }}</p>
           <p class="delivery-date mb-0">{{ delivery.delivery_date | date:'mediumDate' }}</p>
           <p class="delivery-date mb-0">{{ delivery.delivery_items.length }} item/s delivered</p>
         <ion-buttons slot="end">
@@ -95,6 +95,37 @@
               </ion-item>
               <div *ngIf="errors?.supplier" class="error-msg">
                 <small>{{ errors?.supplier[0] }}</small>
+              </div>
+            </div>
+
+            @if(!addDeliveryForm.get('supplier')?.value) {
+              <div class="form-group">
+                <ion-item>
+                  <ion-input type="text" label="Supplier Name" labelPlacement="floating" formControlName="supplier_name"></ion-input>
+                </ion-item>
+                <div *ngIf="errors?.supplier_name" class="error-msg">
+                  <small>{{ errors?.supplier_name[0] }}</small>
+                </div>
+              </div>
+              <div class="form-group">
+                <ion-item>
+                  <ion-input type="text" label="Supplier Address" labelPlacement="floating" formControlName="supplier_address"></ion-input>
+                </ion-item>
+                <div *ngIf="errors?.supplier_address" class="error-msg">
+                  <small>{{ errors?.supplier_address[0] }}</small>
+                </div>
+              </div>
+            }
+
+            <div class="form-group">
+              <ion-item>
+                  <ion-select label="Select Product Type" labelPlacement="floating" formControlName="product_type" (ionChange)="onProductTypeChange()">
+                    <ion-select-option value="WET">Wet Goods</ion-select-option>
+                    <ion-select-option value="DRY">Dry Goods</ion-select-option>
+                  </ion-select>
+              </ion-item>
+              <div *ngIf="errors?.product_type" class="error-msg">
+                <small>{{ errors?.product_type[0] }}</small>
               </div>
             </div>
 

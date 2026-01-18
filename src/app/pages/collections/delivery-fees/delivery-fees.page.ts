@@ -39,7 +39,10 @@ export class DeliveryFeesPage implements OnInit {
   ) { 
     this.addDeliveryForm = this.fb.group({
       delivery_date: [moment().format('YYYY-MM-DD'), [Validators.required]],
-      supplier : ['', [Validators.required]],
+      supplier : ['', []],
+      supplier_name : [''],
+      supplier_address : [''],
+      product_type : ['', [Validators.required]],
       items: this.fb.array([]),
     });
     const items = this.addDeliveryForm.get('items') as FormArray;
@@ -50,6 +53,9 @@ export class DeliveryFeesPage implements OnInit {
       id: ['', [Validators.required]],
       delivery_date: [moment().format('YYYY-MM-DD'), [Validators.required]],
       supplier : ['', [Validators.required]],
+      supplier_name : [''],
+      supplier_address : [''],
+      product_type : ['', [Validators.required]],
       items: this.fb.array([]),
     });
   }
@@ -60,6 +66,14 @@ export class DeliveryFeesPage implements OnInit {
 
   get toUpdateItems(): FormArray {
     return this.updateDeliveryForm.get('items') as FormArray;
+  }
+
+  async onProductTypeChange() {
+    (this.addDeliveryForm.get('items') as FormArray)?.clear();
+    this._items = [];
+    this.addItem();
+    this._items = await this.itemService.getItems({type: this.addDeliveryForm.get('product_type')?.value});
+    console.log(this._items);
   }
 
   showUpdateDeliveryModal(delivery : any) {
@@ -109,7 +123,7 @@ export class DeliveryFeesPage implements OnInit {
         date: this.dateFilter
       });
       this.suppliers = await this.supplierService.getSuppliers();
-      this._items = await this.itemService.getItems();
+      this._items = await this.itemService.getItems({});
       // this.units = await this.unitService.getUnits();
       this.origins = await this.supplierService.getOrigins();
       this.itemFeeSetting = await this.itemFeeSettingService.getActiveItemFeeSetting();
